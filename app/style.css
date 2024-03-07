@@ -47,3 +47,14 @@ body {
   width: 100%;
   margin: 10px 2px;
 }
+
+.comment-div {
+  position: relative;
+}
+
+.date {
+  position: absolute;
+  top: 5px;
+  right: 0;
+  color: gray;
+}

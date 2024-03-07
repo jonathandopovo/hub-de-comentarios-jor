@@ -3,15 +3,25 @@ let data = [
     author: "Enzo",
     comment:
       "Na minha humida opniau, axo q iscola n da futuru pq conheso genti rika q n estudo😒😒",
+    date: "7 de mar., 19hrs",
   },
 ];
+
+const getHrAndData = () => {
+  const currentDate = new Date();
+  const options = { day: "numeric", month: "short", hour: "numeric" };
+  const date = `${currentDate.toLocaleDateString("pt-BR", options)}hrs`;
+
+  return date;
+};
 
 const submitComment = (e) => {
   e.preventDefault();
   const author = inputAuthor.value;
   const comment = inputComment.value;
+  const date = getHrAndData();
 
-  data.push({ author, comment });
+  data.push({ author, comment, date });
   loadComment();
 };
 
@@ -27,7 +37,7 @@ const displayComment = () => {
   data.forEach((element) => {
     const divDisplay = document.createElement("div");
     divDisplay.innerHTML = `
-    <div class="d-flex text-body-secondary pt-3">
+    <div class="d-flex text-body-secondary pt-3 comment-div">
         <svg
           class="bd-placeholder-img flex-shrink-0 me-2 rounded"
           width="32"
@@ -46,6 +56,7 @@ const displayComment = () => {
           <strong class="d-block text-gray-dark">@${element.author}</strong>
           ${element.comment}
         </p>
+        <small class="date">${element.date}</small>
       </div>
     `;
     divComments.appendChild(divDisplay);
