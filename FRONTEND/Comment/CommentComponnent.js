@@ -1,40 +1,43 @@
-let data = [
-  {
-    author: "Enzo",
-    comment:
-      "Na minha humida opniau, axo q iscola n da futuru pq conheso genti rika q n estudo😒😒",
-    date: "7 de mar., 19hrs",
-  },
-];
+import { formatDate } from "../utils.js";
 
-const getHrAndData = () => {
-  const currentDate = new Date();
-  const options = { day: "numeric", month: "short", hour: "numeric" };
-  const date = `${currentDate.toLocaleDateString("pt-BR", options)}hrs`;
+const getInputComment = () => {
+  return {
+    author: document.getElementById("inputAuthor"),
+    comment: document.getElementById("inputComment"),
+  };
+};
 
-  return date;
+const getInputCommentValue = () => {
+  return {
+    author: document.getElementById("inputAuthor").value,
+    comment: document.getElementById("inputComment").value,
+  };
+};
+
+const setInputComment = (authorValue, commentValue) => {
+  const { author, comment } = getInputComment();
+  author.value = authorValue;
+  author.value = authorValue;
 };
 
 const submitComment = (e) => {
   e.preventDefault();
-  const author = inputAuthor.value;
-  const comment = inputComment.value;
-  const date = getHrAndData();
 
-  data.push({ author, comment, date });
+  const comment = getInputCommentValue();
+
   loadComment();
 };
 
 const loadComment = () => {
   if (data) {
-    displayComment();
+    displayComment(data);
   }
 };
 
-const displayComment = () => {
+const displayComment = (comments) => {
   const divComments = document.getElementById("feed-comentarios");
   divComments.innerHTML = ``;
-  data.forEach((element) => {
+  comments.forEach((element) => {
     const divDisplay = document.createElement("div");
     divDisplay.innerHTML = `
     <div class="d-flex text-body-secondary pt-3 comment-div">
@@ -56,14 +59,21 @@ const displayComment = () => {
           <strong class="d-block text-gray-dark">@${element.author}</strong>
           ${element.comment}
         </p>
-        <small class="date">${element.date}</small>
+        <small class="date">${formatDate(element.date)}</small>
       </div>
     `;
     divComments.appendChild(divDisplay);
   });
 };
 
-const formComment = document.getElementById("formComment");
-formComment.addEventListener("submit", submitComment);
+const CommentComponnent = {
+  run: () => {
+    const formComment = document.getElementById("formComment");
+    formComment.addEventListener("submit", submitComment);
+    window.onload = () => {
+      loadComment();
+    };
+  },
+};
 
-loadComment();
+export { CommentComponnent };
