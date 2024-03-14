@@ -1,4 +1,4 @@
-import { formatDate } from "../utils.js";
+import { formatDate, randomColor } from "../utils.js";
 import { CommentService } from "../services/comment.service.js";
 import { Comment } from "../models/comment.model.js";
 
@@ -39,8 +39,8 @@ const loadComment = async () => {
             comment.id,
             comment.author,
             comment.comment_text,
-            comment.createdAt,
-            comment.updatedAt
+            comment.created_at,
+            comment.updated_at
           )
       );
       displayComment(comments);
@@ -54,7 +54,7 @@ const loadComment = async () => {
 const displayComment = (comments) => {
   const divComments = document.getElementById("feed-comentarios");
   divComments.innerHTML = ``;
-  comments.forEach((element) => {
+  comments.reverse().forEach((element) => {
     const divDisplay = document.createElement("div");
     divDisplay.innerHTML = `
     <div class="d-flex text-body-secondary pt-3 comment-div">
@@ -69,8 +69,10 @@ const displayComment = (comments) => {
           focusable="false"
         >
           <title>Comentário</title>
-          <rect width="100%" height="100%" fill="#007bff"></rect>
-          <text x="35%" y="50%" fill="#007bff" dy=".3em">32x32</text>
+          <rect width="100%" height="100%" fill="${randomColor()}"></rect>
+          <text x="38%" y="55%" fill="#fff" dy=".3em">${element
+            .getAuthor()
+            .charAt(0)}</text>
         </svg>
         <p class="pb-3 mb-0 small lh-sm border-bottom">
           <strong class="d-block text-gray-dark">@${element.getAuthor()}</strong>
