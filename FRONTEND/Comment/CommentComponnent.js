@@ -1,4 +1,6 @@
 import { formatDate } from "../utils.js";
+import { CommentService } from "../services/comment.service.js";
+import { Comment } from "../models/comment.model.js";
 
 const getInputComment = () => {
   return {
@@ -28,10 +30,25 @@ const submitComment = (e) => {
   loadComment();
 };
 
-const loadComment = () => {
-  if (data) {
-    displayComment(data);
-  }
+const loadComment = async () => {
+  CommentService.apiGetComment()
+    .then((result) => {
+      const comments = result.map(
+        (comment) =>
+          new Comment(
+            comment.id,
+            comment.author,
+            comment.comment_text,
+            comment.createdAt,
+            comment.updatedAt
+          )
+      );
+      displayComment(comments);
+    })
+    .catch((error) => {
+      console.error(error);
+      alert(error);
+    });
 };
 
 const displayComment = (comments) => {
@@ -53,13 +70,13 @@ const displayComment = (comments) => {
         >
           <title>Comentário</title>
           <rect width="100%" height="100%" fill="#007bff"></rect>
-          <text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text>
+          <text x="35%" y="50%" fill="#007bff" dy=".3em">32x32</text>
         </svg>
         <p class="pb-3 mb-0 small lh-sm border-bottom">
-          <strong class="d-block text-gray-dark">@${element.author}</strong>
-          ${element.comment}
+          <strong class="d-block text-gray-dark">@${element.getAuthor()}</strong>
+          ${element.getComment_text()}
         </p>
-        <small class="date">${formatDate(element.date)}</small>
+        <small class="date">${formatDate(element.getCreatedAt())}</small>
       </div>
     `;
     divComments.appendChild(divDisplay);

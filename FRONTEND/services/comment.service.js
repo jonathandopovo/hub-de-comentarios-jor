@@ -1,10 +1,10 @@
 const URL_API = "http://localhost:8000";
 
-const CommentService = () => {
+const CommentService = {
   apiGetComment: () => {
     return new Promise((resolve, reject) => {
       fetch(`${URL_API}/comment`)
-        .then((response) => response.json)
+        .then((response) => response.json())
         .then((data) => {
           if (data.success) {
             resolve(data.comment);
@@ -15,7 +15,7 @@ const CommentService = () => {
     }).catch((error) => {
       reject(error);
     });
-  };
+  },
 };
 
 export { CommentService };
