@@ -1,4 +1,4 @@
-import { formatDate, randomColor } from "../utils.js";
+import { formatDate, darkColors, lightColors } from "../utils.js";
 import { CommentService } from "../services/comment.service.js";
 import { Comment } from "../models/comment.model.js";
 
@@ -69,10 +69,10 @@ const displayComment = (comments) => {
           focusable="false"
         >
           <title>Comentário</title>
-          <rect width="100%" height="100%" fill="${randomColor()}"></rect>
-          <text x="38%" y="55%" fill="#fff" dy=".3em">${element
-            .getAuthor()
-            .charAt(0)}</text>
+          <rect width="100%" height="100%" fill="${darkColors()}"></rect>
+          <text x="38%" y="55%" fill="${lightColors()}" dy=".3em">${element
+      .getAuthor()
+      .charAt(0)}</text>
         </svg>
         <p class="pb-3 mb-0 small lh-sm border-bottom">
           <strong class="d-block text-gray-dark">@${element.getAuthor()}</strong>

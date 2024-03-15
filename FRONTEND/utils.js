@@ -13,11 +13,35 @@ const formatDate = (dateToConvert) => {
   return date;
 };
 
-const randomColor = () => {
-  const red = Math.floor(Math.random() * 255);
-  const green = Math.floor(Math.random() * 255);
-  const blue = Math.floor(Math.random() * 255);
-  return `rgb(${red}, ${green}, ${blue})`;
+const darkColors = () => {
+  const colors = [
+    "#1a1a40",
+    "#4c0027",
+    "#1e5128",
+    "#082032",
+    "#000000",
+    "#962234",
+    "#5b0045",
+  ];
+
+  return randomColor(colors);
 };
 
-export { formatDate, randomColor };
+const lightColors = () => {
+  const colors = [
+    "#ffe4e1",
+    "#d8f8e1",
+    "#fcb7af",
+    "#b0f2c2",
+    "#b0c2f2",
+    "#fdf9c4",
+  ];
+  
+  return randomColor(colors);
+};
+
+const randomColor = (colors) => {
+  return colors[Math.floor(Math.random() * colors.length)];
+};
+
+export { formatDate, darkColors, lightColors };
