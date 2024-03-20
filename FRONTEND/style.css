@@ -18,6 +18,36 @@ body {
   }
 }
 
+.login {
+  display: flex;
+  justify-content: center;
+  & button {
+    width: 100%;
+    margin-top: 20px;
+  }
+  & label {
+    text-align: left;
+    color: #545454;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: small;
+  }
+  & h3 {
+    text-align: center;
+  }
+}
+
+#feed-comentarios {
+  height: 300px;
+}
+
+.login input {
+  height: 40px;
+  width: 100%;
+  border: 1px solid rgb(177, 177, 177);
+  border-radius: 4px;
+}
+
 .div-autor {
   margin-bottom: 20px;
   & input {

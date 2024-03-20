@@ -26,13 +26,50 @@ db.connect(function (err) {
   console.log("Conectado com sucesso!");
 });
 
+server.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  db.query(
+    "SELECT * FROM user WHERE username = ? AND password = ?",
+    [username, password],
+    (err, results) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ success: false, error: "Internal server error" });
+      }
+      if (results.length > 0) {
+        const { id, username, firstname, lastname } = results[0];
+        return res.json({
+          success: true,
+          user: { id, username, firstname, lastname },
+        });
+      } else {
+        return res.json({
+          success: false,
+          error: "Usuário ou senha inválidos",
+        });
+      }
+    }
+  );
+});
+
 server.get("/comment", (req, res) => {
   db.query("SELECT * FROM comment", (err, result) => {
     if (err) {
-      res.status(500).json({ success: false, error: err });
+      return res.status(500).json({ success: false, error: err });
     }
 
-    res.json({ success: true, comment: result });
+    return res.json({ success: true, comment: result });
+  });
+});
+
+server.get("/user", (req, res) => {
+  db.query("SELECT * FROM user", (err, result) => {
+    if (err) {
+      return res.status(500).json({ success: false, error: err });
+    }
+
+    return res.json({ success: true, user: result });
   });
 });
 

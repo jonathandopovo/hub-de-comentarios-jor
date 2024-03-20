@@ -93,6 +93,10 @@ const CommentComponnent = {
       loadComment();
     };
   },
+
+  params: (usr) => {
+    _user = usr;
+  },
 };
 
 export { CommentComponnent };
