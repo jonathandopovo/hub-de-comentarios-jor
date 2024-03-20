@@ -73,6 +73,16 @@ server.get("/user", (req, res) => {
   });
 });
 
+server.get("/user", (req, res) => {
+  db.query("SELECT * FROM user", (err, result) => {
+    if (err) {
+      res.status(500).json({ success: false, error: err });
+    }
+
+    res.json({ success: true, user: result });
+  });
+});
+
 server.listen(PORT, () => {
   console.log(`O server está rodando em http://localhost:${PORT}`);
 });
