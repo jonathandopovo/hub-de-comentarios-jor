@@ -68,6 +68,8 @@ const loadComment = async () => {
 const displayComment = (comments) => {
   const divComments = document.getElementById("feed-comentarios");
   divComments.innerHTML = ``;
+  
+  // Reverse para ordenar da mais recente para a mais antiga
   comments.reverse().forEach((element) => {
     const divDisplay = document.createElement("div");
     divDisplay.innerHTML = `
