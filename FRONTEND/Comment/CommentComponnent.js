@@ -5,21 +5,26 @@ import { Comment } from "../models/comment.model.js";
 const getInputComment = () => {
   return {
     author: document.getElementById("inputAuthor"),
-    comment: document.getElementById("inputComment"),
+    comment_text: document.getElementById("inputComment"),
   };
 };
 
 const getInputCommentValue = () => {
   return {
     author: document.getElementById("inputAuthor").value,
-    comment: document.getElementById("inputComment").value,
+    comment_text: document.getElementById("inputComment").value,
   };
 };
 
 const setInputComment = (authorValue, commentValue) => {
-  const { author, comment } = getInputComment();
+  const { author, comment_text } = getInputComment();
   author.value = authorValue;
-  author.value = authorValue;
+  comment_text.value = commentValue;
+};
+
+const clearCommentField = () => {
+  const { comment_text } = getInputComment();
+  comment_text.value = "";
 };
 
 const submitComment = (e) => {
@@ -27,7 +32,15 @@ const submitComment = (e) => {
 
   const comment = getInputCommentValue();
 
-  loadComment();
+  CommentService.apiPostComment(comment)
+    .then((response) => {
+      alert(response);
+      clearCommentField();
+      loadComment();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
 const loadComment = async () => {
@@ -43,6 +56,7 @@ const loadComment = async () => {
             comment.updated_at
           )
       );
+
       displayComment(comments);
     })
     .catch((error) => {

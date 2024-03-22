@@ -83,6 +83,22 @@ server.get("/user", (req, res) => {
   });
 });
 
+server.post("/new-comment", (req, res) => {
+  const { author, comment_text } = req.body;
+  db.query(
+    "INSERT INTO comment (author, comment_text) VALUES (?,?)",
+    [author, comment_text],
+    (err, result) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ success: false, error: "Internal server error" });
+      }
+      return res.json({ success: true });
+    }
+  );
+});
+
 server.listen(PORT, () => {
   console.log(`O server está rodando em http://localhost:${PORT}`);
 });
