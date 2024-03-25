@@ -1,3 +1,12 @@
+::-webkit-scrollbar {
+  width: 5px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: rgb(158, 158, 158);
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #e9e0ce;
@@ -85,7 +94,14 @@ body {
 .date {
   position: absolute;
   top: 5px;
-  right: 0;
+  right: 8px;
   font-size: 10px;
   color: gray;
+}
+
+header {
+  top: 5px;
+  left: 5px;
+  z-index: 1;
+  position: fixed;
 }
