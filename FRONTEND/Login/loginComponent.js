@@ -11,9 +11,11 @@ const getLoginInputs = () => {
 const handleShowHide = () => {
   const newCommentTag = document.getElementById("form-comentario");
   const loginTag = document.getElementById("login-form");
+  const pageHeader = document.getElementById("page-header");
 
   if (newCommentTag.classList.contains("d-none")) {
     newCommentTag.classList.remove("d-none");
+    pageHeader.classList.remove("d-none");
     loginTag.classList.add("d-none");
   } else {
     newCommentTag.classList.add("d-none");
@@ -28,6 +30,20 @@ const handleLogin = (e) => {
   const user = new User(username.value, password.value);
 
   LoginService.apiAuthUser(user).then((response) => {
+    const userDataTbody = document.getElementById("userDataTbody");
+    const { username, password } = getLoginInputs();
+
+    username.value = "";
+    password.value = "";
+
+    userDataTbody.innerHTML = `<tr>
+      <th scope="row">${response.id}</th>
+      <td>${response.username}</td>
+      <td>${encryptPassword(user.getPassword())}</td>
+      <td>${response.firstname}</td>
+      <td>${response.lastname}</td>
+    </tr>`;
+
     user.setId(response.id);
     user.setPassword(null);
     user.setFirstname(response.firstname);
@@ -39,6 +55,14 @@ const handleLogin = (e) => {
   });
 
   handleShowHide();
+};
+
+const encryptPassword = (password) => {
+  let encryptedPassword = "";
+  for (let i = 0; i < password.length; i++) {
+    encryptedPassword += "*";
+  }
+  return encryptedPassword;
 };
 
 const loginComponent = {

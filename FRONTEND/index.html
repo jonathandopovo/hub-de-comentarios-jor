@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <header>
+    <header class="d-none" id="page-header">
       <div class="dropdown">
         <button
           class="btn btn-secondary dropdown-toggle"
@@ -23,13 +23,17 @@
         >
           Usuário
         </button>
-        <ul class="dropdown-menu">
-          <button class="dropdown-item">Meus Dados</button>
-          <button class="dropdown-item">Sair</button>
-        </ul>
+        <nav>
+          <ul class="dropdown-menu">
+            <button class="dropdown-item" id="show-user-data-btn">
+              Meus Dados
+            </button>
+            <button class="dropdown-item" id="logout-btn">Sair</button>
+          </ul>
+        </nav>
       </div>
     </header>
-    
+
     <div class="container">
       <div class="row gap-3">
         <div class="login card shadow col" id="login-form">
@@ -57,31 +61,51 @@
           </form>
         </div>
         <div class="comentarios shadow-sm col d-none" id="form-comentario">
-          <h3>Hub de Comentários</h3>
-          <form id="formComment">
-            <div>
-              <div class="div-autor">
-                <label for="author">Autor:</label>
-                <input type="text" name="author" id="inputAuthor" required />
+          <div class="text-center d-none" id="user-data">
+            <h3 class="mb-4">Dados do Usuário</h3>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Usuário</th>
+                  <th scope="col">Senha</th>
+                  <th scope="col">Primeiro Nome</th>
+                  <th scope="col">Último Nome</th>
+                </tr>
+              </thead>
+              <tbody id="userDataTbody"></tbody>
+            </table>
+            <button class="btn btn-dark mt-4" id="back-to-comment-form">
+              Voltar
+            </button>
+          </div>
+          <div class="" id="form-new-comment">
+            <h3>Hub de Comentários</h3>
+            <form id="formComment">
+              <div>
+                <div class="div-autor">
+                  <label for="author">Autor:</label>
+                  <input type="text" name="author" id="inputAuthor" required />
+                </div>
+                <div class="div-comentario">
+                  <label for="comment">Digite seu Comentário:</label>
+                  <textarea
+                    name="comment"
+                    id="inputComment"
+                    cols="30"
+                    rows="8"
+                    required
+                  ></textarea>
+                </div>
+                <input
+                  type="submit"
+                  value="Enviar"
+                  class="btn btn-dark"
+                  id="enviar"
+                />
               </div>
-              <div class="div-comentario">
-                <label for="comment">Digite seu Comentário:</label>
-                <textarea
-                  name="comment"
-                  id="inputComment"
-                  cols="30"
-                  rows="8"
-                  required
-                ></textarea>
-              </div>
-              <input
-                type="submit"
-                value="Enviar"
-                class="btn btn-dark"
-                id="enviar"
-              />
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
         <div class="comments col my-3 p-3 bg-body rounded shadow-sm">
           <h3 class="border-bottom pb-2 mb-0">Feed</h3>
