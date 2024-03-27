@@ -11,7 +11,7 @@ const showUserData = () => {
 const hiddenUserData = () => {
   const formNewComment = document.getElementById("form-new-comment");
   const userData = document.getElementById("user-data");
-  
+
   if (formNewComment.classList.contains("d-none")) {
     formNewComment.classList.remove("d-none");
     userData.classList.add("d-none");
@@ -37,6 +37,16 @@ const logout = () => {
   const inputAuthor = document.querySelector("#inputAuthor");
   inputAuthor.disabled = false;
   inputAuthor.value = ``;
+  changeUserTableData("", "", "", "", "");
+};
+
+const changeUserTableData = (id, username, password, firstname, lastname) => {
+  const userTable = document.getElementsByTagName("td");
+  userTable[0].innerText = id;
+  userTable[1].innerText = username;
+  userTable[2].innerText = password.replace(/./g, "*");
+  userTable[3].innerText = firstname;
+  userTable[4].innerText = lastname;
 };
 
 const userDataComponent = {
@@ -51,4 +61,4 @@ const userDataComponent = {
   },
 };
 
-export { userDataComponent };
+export { userDataComponent, changeUserTableData };
