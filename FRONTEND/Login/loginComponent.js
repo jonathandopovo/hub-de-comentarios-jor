@@ -36,7 +36,6 @@ const handleLogin = (e) => {
         response.username,
         password.value,
         response.firstname,
-        response.lastname,
         response.lastname
       );
 
