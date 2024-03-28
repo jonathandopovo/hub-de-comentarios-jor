@@ -54,13 +54,16 @@ server.post("/login", (req, res) => {
 });
 
 server.get("/comment", (req, res) => {
-  db.query("SELECT * FROM comment", (err, result) => {
-    if (err) {
-      return res.status(500).json({ success: false, error: err });
-    }
+  db.query(
+    "SELECT comment.id,	user.username as author, comment.comment_text,comment.updated_at FROM `comment-hub` .comment  INNER JOIN user ON comment.userId = user.id ORDER BY comment.updated_at DESC;",
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ success: false, error: err });
+      }
 
-    return res.json({ success: true, comment: result });
-  });
+      return res.json({ success: true, comment: result });
+    }
+  );
 });
 
 server.get("/user", (req, res) => {
