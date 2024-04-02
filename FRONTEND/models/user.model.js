@@ -43,12 +43,12 @@ class User {
     this.username = username;
   }
 
-  getPassword() {
-    return this.password;
-  }
-
   setPassword(password) {
     this.password = password;
+  }
+
+  getPassword() {
+    return this.password;
   }
 
   getFirstname() {

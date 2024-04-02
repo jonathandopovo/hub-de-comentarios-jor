@@ -1,6 +1,7 @@
 import { formatDate, darkColors, lightColors } from "../utils.js";
 import { CommentService } from "../services/comment.service.js";
 import { Comment } from "../models/comment.model.js";
+import { loggedUser } from "../Login/loginComponent.js";
 
 const getInputComment = () => {
   return {
@@ -30,7 +31,10 @@ const clearCommentField = () => {
 const submitComment = (e) => {
   e.preventDefault();
 
-  const comment = getInputCommentValue();
+  const comment = {
+    userId: loggedUser.user.getId(),
+    comment_text: document.getElementById("inputComment").value,
+  };
 
   CommentService.apiPostComment(comment)
     .then((response) => {
@@ -49,6 +53,7 @@ const loadComment = async () => {
       const comments = result.map(
         (comment) =>
           new Comment(
+            comment.userId,
             comment.id,
             comment.author,
             comment.comment_text,
@@ -56,6 +61,8 @@ const loadComment = async () => {
             comment.updated_at
           )
       );
+
+      console.log(comments);
 
       displayComment(comments);
     })
@@ -68,9 +75,8 @@ const loadComment = async () => {
 const displayComment = (comments) => {
   const divComments = document.getElementById("feed-comentarios");
   divComments.innerHTML = ``;
-  
-  // Reverse para ordenar da mais recente para a mais antiga
-  comments.reverse().forEach((element) => {
+
+  comments.forEach((element) => {
     const divDisplay = document.createElement("div");
     divDisplay.innerHTML = `
     <div class="d-flex text-body-secondary pt-3 comment-div">
@@ -94,11 +100,34 @@ const displayComment = (comments) => {
           <strong class="d-block text-gray-dark">@${element.getAuthor()}</strong>
           ${element.getComment_text()}
         </p>
-        <small class="date">${formatDate(element.getCreatedAt())}</small>
+        <small class="date">${formatDate(element.getUpdatedAt())}</small>
       </div>
     `;
     divComments.appendChild(divDisplay);
   });
+};
+
+const loadAllMyComments = () => {
+  CommentService.apiGetCommentById(loggedUser.user.getId())
+    .then((result) => {
+      const comments = result.map(
+        (comment) =>
+          new Comment(
+            comment.userId,
+            comment.id,
+            comment.author,
+            comment.comment_text,
+            comment.created_at,
+            comment.updated_at
+          )
+      );
+
+      displayComment(comments);
+    })
+    .catch((error) => {
+      console.error(error);
+      alert(error);
+    });
 };
 
 const CommentComponnent = {
@@ -108,6 +137,8 @@ const CommentComponnent = {
     window.onload = () => {
       loadComment();
     };
+    const loadMyComments = document.getElementById("loadMyComments");
+    loadMyComments.addEventListener("click", loadAllMyComments);
   },
 
   params: (usr) => {

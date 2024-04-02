@@ -40,6 +40,27 @@ const CommentService = {
       reject(error);
     });
   },
+  apiGetCommentById: (userId) => {
+    return new Promise((resolve, reject) => {
+      fetch(`${URL_API}/comment-by-id`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: userId }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            resolve(data.comment);
+          } else {
+            reject("Erro na requisição");
+          }
+        });
+    }).catch((error) => {
+      reject(error);
+    });
+  },
 };
 
 export { CommentService };

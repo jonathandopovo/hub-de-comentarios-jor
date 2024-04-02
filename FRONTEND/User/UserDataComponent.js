@@ -1,3 +1,5 @@
+import { StoragedService } from "../services/localStorage.service.js";
+
 const showUserData = () => {
   const formNewComment = document.getElementById("form-new-comment");
   const userData = document.getElementById("user-data");
@@ -38,13 +40,14 @@ const logout = () => {
   inputAuthor.disabled = false;
   inputAuthor.value = ``;
   changeUserTableData("", "", "", "", "");
+  StoragedService.user.remove();
 };
 
 const changeUserTableData = (id, username, password, firstname, lastname) => {
   const userTable = document.getElementsByTagName("td");
   userTable[0].innerText = id;
   userTable[1].innerText = username;
-  userTable[2].innerText = password.replace(/./g, "*");
+  userTable[2].innerText = password;
   userTable[3].innerText = firstname;
   userTable[4].innerText = lastname;
 };

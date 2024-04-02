@@ -55,7 +55,22 @@ server.post("/login", (req, res) => {
 
 server.get("/comment", (req, res) => {
   db.query(
-    "SELECT comment.id,	user.username as author, comment.comment_text,comment.updated_at FROM `comment-hub` .comment  INNER JOIN user ON comment.userId = user.id ORDER BY comment.updated_at DESC;",
+    "SELECT comment.id, comment.userId, user.firstname as author, comment.comment_text, comment.created_at, comment.updated_at FROM `comment-hub` .comment INNER JOIN user ON comment.userId = user.id ORDER BY comment.updated_at DESC;",
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ success: false, error: err });
+      }
+
+      return res.json({ success: true, comment: result });
+    }
+  );
+});
+
+server.get("/comment-by-userId", (req, res) => {
+  const { userId } = req.body;
+  db.query(
+    "SELECT comment.id, comment.userId, user.firstname as author, comment.comment_text, comment.created_at, comment.updated_at FROM `comment-hub` .comment INNER JOIN user ON comment.userId = user.id WHERE userId = ? ORDER BY comment.updated_at DESC;",
+    [userId],
     (err, result) => {
       if (err) {
         return res.status(500).json({ success: false, error: err });
@@ -87,10 +102,10 @@ server.get("/user", (req, res) => {
 });
 
 server.post("/new-comment", (req, res) => {
-  const { author, comment_text } = req.body;
+  const { userId, comment_text } = req.body;
   db.query(
-    "INSERT INTO comment (author, comment_text) VALUES (?,?)",
-    [author, comment_text],
+    "INSERT INTO comment (userId, comment_text) VALUES (?,?)",
+    [userId, comment_text],
     (err, result) => {
       if (err) {
         return res

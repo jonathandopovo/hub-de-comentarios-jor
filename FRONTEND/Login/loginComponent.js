@@ -1,6 +1,11 @@
 import { User } from "../models/user.model.js";
 import { LoginService } from "../services/login.service.js";
 import { changeUserTableData } from "../User/UserDataComponent.js";
+import { StoragedService } from "../services/localStorage.service.js";
+
+const loggedUser = {
+  user: undefined,
+};
 
 const getLoginInputs = () => {
   return {
@@ -34,15 +39,18 @@ const handleLogin = (e) => {
       changeUserTableData(
         response.id,
         response.username,
-        password.value,
+        password.value.replace(/./g, "*"),
         response.firstname,
         response.lastname
       );
 
       user.setId(response.id);
-      user.setPassword(null);
+      user.setPassword(password.value.replace(/./g, "*"));
       user.setFirstname(response.firstname);
       user.setLastname(response.lastname);
+
+      loggedUser.user = user;
+      StoragedService.user.store(user);
 
       username.value = "";
       password.value = "";
@@ -58,11 +66,34 @@ const handleLogin = (e) => {
     });
 };
 
+const loadStoragedUser = () => {
+  if (StoragedService.user.get()) {
+    const user = StoragedService.user.get();
+    console.log(user);
+    loggedUser.user = user;
+
+    changeUserTableData(
+      user.getId(),
+      user.getUsername(),
+      user.getPassword(),
+      user.getFirstname(),
+      user.getLastname()
+    );
+
+    const inputAuthor = document.querySelector("#inputAuthor");
+    inputAuthor.disabled = true;
+    inputAuthor.value = `${user.getFirstname()} ${user.getLastname()}`;
+
+    handleShowHide();
+  }
+};
+
 const loginComponent = {
   run: () => {
+    loadStoragedUser();
     const formLogin = document.getElementById("formLogin");
     formLogin.addEventListener("submit", handleLogin);
   },
 };
 
-export { loginComponent };
+export { loginComponent, loggedUser };
