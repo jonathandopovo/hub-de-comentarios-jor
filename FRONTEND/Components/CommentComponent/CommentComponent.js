@@ -1,7 +1,7 @@
-import { formatDate, darkColors, lightColors } from "../utils.js";
-import { CommentService } from "../services/comment.service.js";
-import { Comment } from "../models/comment.model.js";
-import { loggedUser } from "../Login/loginComponent.js";
+import { formatDate, darkColors, lightColors } from "../../utils.js";
+import { CommentService } from "../../services/comment.service.js";
+import { Comment } from "../../models/comment.model.js";
+import { loggedUser } from "../LoginComponent/loginComponent.js";
 
 const getInputComment = () => {
   return {
@@ -40,7 +40,12 @@ const submitComment = (e) => {
     .then((response) => {
       alert(response);
       clearCommentField();
-      loadComment();
+      const loadMyComments = document.getElementById("loadMyComments");
+      if (loadMyComments.classList.contains("btn-secondary")) {
+        loadCommentsByUserId();
+      } else {
+        loadComment();
+      }
     })
     .catch((error) => {
       console.error(error);
@@ -107,7 +112,7 @@ const displayComment = (comments) => {
   });
 };
 
-const loadAllMyComments = () => {
+const loadCommentsByUserId = () => {
   CommentService.apiGetCommentById(loggedUser.user.getId())
     .then((result) => {
       const comments = result.map(
@@ -130,6 +135,21 @@ const loadAllMyComments = () => {
     });
 };
 
+const whatCommentsAreListed = (comment) => {
+  const loadMyComments = document.getElementById("loadMyComments");
+  if (loadMyComments.classList.contains("btn-success")) {
+    loadMyComments.classList.remove("btn-success");
+    loadMyComments.classList.add("btn-secondary");
+    loadMyComments.innerText = "Carregar Todos Comentários";
+    loadCommentsByUserId();
+  } else {
+    loadMyComments.classList.remove("btn-secondary");
+    loadMyComments.classList.add("btn-success");
+    loadMyComments.innerText = "Carregar Meus Comentários";
+    loadComment();
+  }
+};
+
 const CommentComponnent = {
   run: () => {
     const formComment = document.getElementById("formComment");
@@ -138,7 +158,7 @@ const CommentComponnent = {
       loadComment();
     };
     const loadMyComments = document.getElementById("loadMyComments");
-    loadMyComments.addEventListener("click", loadAllMyComments);
+    loadMyComments.addEventListener("click", whatCommentsAreListed);
   },
 
   params: (usr) => {
@@ -146,4 +166,4 @@ const CommentComponnent = {
   },
 };
 
-export { CommentComponnent };
+export { CommentComponnent, loadComment };

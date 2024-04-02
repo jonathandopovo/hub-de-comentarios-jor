@@ -1,6 +1,6 @@
 import { User } from "../models/user.model.js";
 import { LoginService } from "../services/login.service.js";
-import { changeUserTableData } from "../User/UserDataComponent.js";
+import { changeUserTableData } from "../UserComponent/UserComponent.js";
 import { StoragedService } from "../services/localStorage.service.js";
 
 const loggedUser = {

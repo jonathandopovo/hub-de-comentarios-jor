@@ -42,8 +42,8 @@ const CommentService = {
   },
   apiGetCommentById: (userId) => {
     return new Promise((resolve, reject) => {
-      fetch(`${URL_API}/comment-by-id`, {
-        method: "GET",
+      fetch(`${URL_API}/user-comments`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },

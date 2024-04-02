@@ -1,7 +1,7 @@
-import { CommentComponnent } from "./Comment/CommentComponnent.js";
-import { loginComponent } from "./Login/loginComponent.js";
-import { userDataComponent } from "./User/UserDataComponent.js";
+import { CommentComponnent } from "./Components/CommentComponent/CommentComponent.js";
+import { loginComponent } from "./Components/LoginComponent/loginComponent.js";
+import { userComponent } from "./Components/UserComponent/UserComponent.js";
 
 loginComponent.run();
 CommentComponnent.run();
-userDataComponent.run();
+userComponent.run();

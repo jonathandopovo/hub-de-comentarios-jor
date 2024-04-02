@@ -66,10 +66,10 @@ server.get("/comment", (req, res) => {
   );
 });
 
-server.get("/comment-by-userId", (req, res) => {
+server.post("/user-comments", (req, res) => {
   const { userId } = req.body;
   db.query(
-    "SELECT comment.id, comment.userId, user.firstname as author, comment.comment_text, comment.created_at, comment.updated_at FROM `comment-hub` .comment INNER JOIN user ON comment.userId = user.id WHERE userId = ? ORDER BY comment.updated_at DESC;",
+    "SELECT comment.id, user.firstname as author, comment.comment_text, comment.created_at, comment.updated_at FROM `comment-hub` .comment INNER JOIN user ON comment.userId = user.id WHERE userId = ? ORDER BY comment.updated_at DESC;",
     [userId],
     (err, result) => {
       if (err) {

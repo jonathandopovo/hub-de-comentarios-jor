@@ -1,4 +1,5 @@
-import { StoragedService } from "../services/localStorage.service.js";
+import { StoragedService } from "../../services/localStorage.service.js";
+import { loadComment } from "../CommentComponent/CommentComponent.js";
 
 const showUserData = () => {
   const formNewComment = document.getElementById("form-new-comment");
@@ -41,6 +42,14 @@ const logout = () => {
   inputAuthor.value = ``;
   changeUserTableData("", "", "", "", "");
   StoragedService.user.remove();
+
+  const loadMyComments = document.getElementById("loadMyComments");
+  if (loadMyComments.classList.contains("btn-secondary")) {
+    loadMyComments.classList.remove("btn-secondary");
+    loadMyComments.classList.add("btn-success");
+    loadMyComments.innerText = "Carregar Meus Comentários";
+    loadComment();
+  }
 };
 
 const changeUserTableData = (id, username, password, firstname, lastname) => {
@@ -52,7 +61,7 @@ const changeUserTableData = (id, username, password, firstname, lastname) => {
   userTable[4].innerText = lastname;
 };
 
-const userDataComponent = {
+const userComponent = {
   run: () => {
     const showUserDataBtn = document.getElementById("show-user-data-btn");
     const logutBtn = document.getElementById("logout-btn");
@@ -64,4 +73,4 @@ const userDataComponent = {
   },
 };
 
-export { userDataComponent, changeUserTableData };
+export { userComponent, changeUserTableData };
