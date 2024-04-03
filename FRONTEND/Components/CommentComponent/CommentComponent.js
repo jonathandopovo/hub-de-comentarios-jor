@@ -67,8 +67,6 @@ const loadComment = async () => {
           )
       );
 
-      console.log(comments);
-
       displayComment(comments);
     })
     .catch((error) => {
@@ -112,14 +110,47 @@ const displayComment = (comments) => {
   });
 };
 
+const displayCommentOnTable = (comments) => {
+  const divComments = document.getElementById("feed-comentarios");
+  divComments.innerHTML = ``;
+  const tableDisplay = document.createElement("table");
+  tableDisplay.setAttribute("class", "table");
+  let commentIncrement = `
+    <thead>
+      <tr>
+        <th scope="col">Autor</th>
+        <th scope="col">Comentário</th>
+        <th scope="col">Criado</th>
+        <th scope="col">Atualizado</th>
+      </tr>
+    </thead>
+    <tbody>
+  `;
+
+  comments.forEach((element) => {
+    commentIncrement += `
+      <tr>
+        <td>${element.getAuthor()}</td>
+        <td>${element.getComment_text()}</td>
+        <td>${formatDate(element.getCreatedAt())}</td>
+        <td>${formatDate(element.getUpdatedAt())}</td>
+      </tr>
+    `;
+  });
+  commentIncrement += "</tbody>";
+  tableDisplay.innerHTML = commentIncrement;
+  divComments.appendChild(tableDisplay);
+};
+
 const loadCommentsByUserId = () => {
   CommentService.apiGetCommentById(loggedUser.user.getId())
     .then((result) => {
+      console.log(result);
       const comments = result.map(
         (comment) =>
           new Comment(
-            comment.userId,
             comment.id,
+            null,
             comment.author,
             comment.comment_text,
             comment.created_at,
@@ -127,7 +158,7 @@ const loadCommentsByUserId = () => {
           )
       );
 
-      displayComment(comments);
+      displayCommentOnTable(comments);
     })
     .catch((error) => {
       console.error(error);

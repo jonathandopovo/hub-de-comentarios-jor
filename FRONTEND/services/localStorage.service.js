@@ -14,7 +14,6 @@ const StoragedService = {
       try {
         if (localStorage.getItem("user")) {
           const loadedUser = JSON.parse(localStorage.getItem("user"));
-          console.log(loadedUser);
           const user = new User(
             loadedUser.username,
             loadedUser.password,

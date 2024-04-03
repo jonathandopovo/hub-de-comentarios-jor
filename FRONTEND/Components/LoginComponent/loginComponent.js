@@ -69,7 +69,6 @@ const handleLogin = (e) => {
 const loadStoragedUser = () => {
   if (StoragedService.user.get()) {
     const user = StoragedService.user.get();
-    console.log(user);
     loggedUser.user = user;
 
     changeUserTableData(
