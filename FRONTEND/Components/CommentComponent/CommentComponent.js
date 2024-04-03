@@ -145,7 +145,6 @@ const displayCommentOnTable = (comments) => {
 const loadCommentsByUserId = () => {
   CommentService.apiGetCommentById(loggedUser.user.getId())
     .then((result) => {
-      console.log(result);
       const comments = result.map(
         (comment) =>
           new Comment(
