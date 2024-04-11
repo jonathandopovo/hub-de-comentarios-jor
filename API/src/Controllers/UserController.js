@@ -2,7 +2,7 @@ const UserService = require("../Services/UserService");
 
 const UserController = {
   getUsers: (req, res) => {
-    const result = UserService.getUsers()
+    UserService.getUsers()
       .then((result) => {
         res.json({ success: true, user: result });
       })

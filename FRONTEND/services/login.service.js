@@ -1,4 +1,4 @@
-const URL_API = "http://localhost:8000";
+const URL_API = "http://localhost:8000/login";
 
 const LoginService = {
   apiAuthUser: (user) => {
