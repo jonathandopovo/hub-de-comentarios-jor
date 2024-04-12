@@ -5,6 +5,7 @@ const cors = require("cors");
 const comment = require("./src/Routes/CommentRoute");
 const login = require("./src/Routes/LoginRoute");
 const user = require("./src/Routes/UserRoute");
+require("dotenv").config();
 
 const server = express();
 

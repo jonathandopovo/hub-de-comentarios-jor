@@ -1,4 +1,5 @@
 const db = require("../connection");
+const jwt = require("jsonwebtoken");
 
 const LoginService = {
   loginUser: async (username, password) => {
@@ -11,8 +12,11 @@ const LoginService = {
             reject(err);
           }
           if (results.length > 0) {
-            const { id, username, firstname, lastname } = results[0];
-            resolve({ id, username, firstname, lastname });
+            const user = results[0];
+            const token = jwt.sign(user, process.env.JWT_SECRET, {
+              expiresIn: "1hs",
+            });
+            resolve(token);
           } else {
             reject("Usuário ou senha inválidos");
           }
