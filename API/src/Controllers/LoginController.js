@@ -12,6 +12,10 @@ const LoginController = {
         res.status(500).json({ success: false, error: error });
       });
   },
+  logoutUser: () => {
+    res.clearCookie("token");
+    res.json({ success: true, message: "Usuário saiu com sucesso!" });
+  },
 };
 
 module.exports = LoginController;
