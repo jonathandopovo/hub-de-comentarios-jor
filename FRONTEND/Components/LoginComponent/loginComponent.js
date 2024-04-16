@@ -36,28 +36,26 @@ const handleLogin = (e) => {
 
   LoginService.apiAuthUser(user)
     .then((response) => {
+      const sessionUser = LoginService.getUserSession();
+      sessionUser.setPassword(sessionUser.getPassword().replace(/./g, "*"));
+
       changeUserTableData(
-        response.id,
-        response.username,
-        password.value.replace(/./g, "*"),
-        response.firstname,
-        response.lastname
+        sessionUser.getId(),
+        sessionUser.getUsername(),
+        sessionUser.getPassword(),
+        sessionUser.getFirstname(),
+        sessionUser.getLastname()
       );
 
-      user.setId(response.id);
-      user.setPassword(password.value.replace(/./g, "*"));
-      user.setFirstname(response.firstname);
-      user.setLastname(response.lastname);
-
-      loggedUser.user = user;
-      StoragedService.user.store(user);
+      loggedUser.user = sessionUser;
+      StoragedService.user.store(sessionUser);
 
       username.value = "";
       password.value = "";
 
       const inputAuthor = document.querySelector("#inputAuthor");
       inputAuthor.disabled = true;
-      inputAuthor.value = `${user.getFirstname()} ${user.getLastname()}`;
+      inputAuthor.value = `${sessionUser.getFirstname()} ${sessionUser.getLastname()}`;
 
       handleShowHide();
     })
