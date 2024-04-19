@@ -1,107 +1,122 @@
-::-webkit-scrollbar {
-  width: 5px !important;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  background-color: rgb(158, 158, 158);
-}
-
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #e9e0ce;
-  color: #545454;
-  font-size: small;
-  padding: 50px;
+    font-family: Arial, sans-serif;
 }
 
-.comentarios {
-  margin: 0 auto;
-  padding: 20px;
-  width: 400px;
-  background-color: white;
-  border-radius: 8px;
-  & h3 {
-    text-align: center;
-    font-size: large;
-  }
-}
-
-.login {
-  display: flex;
-  justify-content: center;
-  & button {
-    width: 100%;
-    margin-top: 20px;
-  }
-  & label {
+.comments {
     text-align: left;
-    color: #545454;
-    margin-top: 20px;
-    margin-bottom: 5px;
-    font-size: small;
-  }
-  & h3 {
-    text-align: center;
-  }
+    width: 400px;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    color: brown;
+    font-weight: bolder;
+    /* border: 1px solid rgba(0, 0, 0, 0.2); */
+    border-radius: 10px;
 }
 
-#feed-comentarios {
-  height: 300px;
+.comments *{
+    display: block;
 }
 
-.login input {
-  height: 40px;
-  width: 100%;
-  border: 1px solid rgb(177, 177, 177);
-  border-radius: 4px;
+.comments label {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-.div-autor {
-  margin-bottom: 20px;
-  & input {
-    height: 20px;
-    margin-top: 5px;
-    width: 100%;
-  }
-}
-.div-comentario textarea {
-  margin-top: 5px;
-  width: 100%;
+#form-comentario textarea, input {
+    display: block;
+    color: rgb(17, 35, 41);
+    border-radius: 5px;
+    border: none;
+    background-color: antiquewhite;
+    padding: 5px;
 }
 
-.comentarios #inputAuthor {
-  height: 40px;
-  border: 1px solid rgb(177, 177, 177);
-  border-radius: 4px;
+#form-comentario textarea {
+    height: 40px;
 }
 
-.comentarios textarea {
-  resize: none;
-  border-radius: 4px;
-  border: 1px solid rgb(177, 177, 177);
+.btn-submit{
+    margin-top: 25px;
+    padding: 10px;
+    width: 100px;
 }
 
-#enviar {
-  width: 100%;
-  margin: 10px 2px;
+#login-form * {
+ margin-top: 10px;
+ margin-bottom: 10px;
 }
 
-.comment-div {
-  position: relative;
+#login-form,
+#form-comentario{
+    height: fit-content;
 }
 
-.date {
-  position: absolute;
-  top: 5px;
-  right: 8px;
-  font-size: 10px;
-  color: gray;
+#form-comentario form{
+    margin: 10px auto 0px auto;
+    padding: 10px auto 0px auto;
 }
 
-header {
-  top: 5px;
-  left: 5px;
-  z-index: 1;
-  position: fixed;
+.date-style{
+    display: inline;
+    font-size: smaller;
+    height: fit-content;
+}
+
+.disabled{
+    display: none;
+}
+
+.comments{
+    transition: all 0.5s ease;
+}
+
+.comments.disabled{
+    opacity: 0;
+    pointer-events: none;
+}
+
+.btn {
+    color:white;
+    background-color: rgb(100,42,42);
+}
+#feed{
+    max-height: 80vh;
+} 
+#comment-feed{
+    max-height: 60vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin: 10px auto 0px auto;
+}
+
+#comment-feed::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+}
+
+#comment-feed::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: #c2c9d2;
+}
+
+header{
+    height: 10vh;
+    max-height: 10vh;
+}
+
+#user-profile {
+    float: left;
+    margin: 20px auto auto 20px !important;
+}
+
+#user-profile p{
+    margin: 5px 5px;
+}
+
+#btnMeusComentarios{
+    margin: 10px auto 0px auto;
+    padding: 10px auto 0px auto;
+    width: auto;
+    float: right;
 }
