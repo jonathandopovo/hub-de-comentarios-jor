@@ -36,7 +36,9 @@ const userProfileHeader = (name, imgLink) => {
 const setCommentField = () => {
     const { username, imgLink } = LoginService.getUserSession();
     const authorProfile = document.getElementById('authorProfile');
-    authorProfile.innerHTML = userProfileHeader(username, imgLink)
+    const user = LoginService.getUserSession();
+    authorProfile.innerHTML = `${user.getFirstname()} ${user.getLastname()}`
+    userProfileHeader(username, imgLink)
 }
 
 const setSignedUser = () => {

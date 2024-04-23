@@ -48,7 +48,11 @@ const main = `
             <div id="user-content">
 
             </div>
-            <button id="btnSairMDados" class="btn-submit btn btn-dark my-2">Voltar</button>
+            <div class="d-flex">
+                <button id="btnSairMDados" class="btn-submit btn btn-dark my-2">Voltar</button>
+                <button id="btnEditUserData" class="btn-submit btn btn-dark mx-4 my-2">Editar</button>
+            </div>
+            
         </div>
     </div>
     <!--FEED: DISPLAY COMMENTS -->

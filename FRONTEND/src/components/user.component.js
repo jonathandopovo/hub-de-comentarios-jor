@@ -2,15 +2,15 @@ import UserService from "../services/user.service.js";
 import LoginService from "../services/login.service.js";
 import { randomColors } from "../utils.js";
 import { loadComment } from "./comment.component.js";
-import MainView from '../view/main.view.js';
+import MainView from "../view/main.view.js";
 
 const loadUserData = () => {
-    const user = LoginService.getUserSession();
-    displayUserData(user);
-}
+  const user = LoginService.getUserSession();
+  displayUserData(user);
+};
 
 const iconeUsuario = (avatarColor) => {
-    return `
+  return `
 <div>
 <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 24 24"
 fill="none">
@@ -22,16 +22,14 @@ fill="none">
     fill="#${avatarColor}" />
 </svg>
 <div>
-`
-}
-
-
+`;
+};
 
 const displayUserData = (user) => {
-    const userContent = document.getElementById('user-content');
-    userContent.innerHTML = ``
-    const newDiv = document.createElement('div');
-    newDiv.innerHTML = `
+  const userContent = document.getElementById("user-content");
+  userContent.innerHTML = ``;
+  const newDiv = document.createElement("div");
+  newDiv.innerHTML = `
     <div>
     <button id='btnMeusComentarios' class='btn-submit btn btn-dark my-2'>Meus Comentários</button>
     </div>
@@ -59,48 +57,104 @@ const displayUserData = (user) => {
             <input class="form-control" type="password" name="user_password" id="user_password"
                 value="........" readonly>
         </div>
-    </div>`
+    </div>`;
 
-    userContent.appendChild(newDiv)
+  userContent.appendChild(newDiv);
 
-    const btnMeusComentarios = document.getElementById('btnMeusComentarios');
-    btnMeusComentarios.addEventListener('click', handleMeusComentarios);
-
-}
+  const btnMeusComentarios = document.getElementById("btnMeusComentarios");
+  btnMeusComentarios.addEventListener("click", handleMeusComentarios);
+};
 
 const handleMeusComentarios = () => {
-    const user = LoginService.getUserSession();
-    UserService.apiGetUserComments(user.id).then(data => {
-        console.log(data);
-        MainView.commentsUpdate(data, 'Meus Comentários')
-    }).catch(error => {
-        alert(error.message)
+  const user = LoginService.getUserSession();
+  UserService.apiGetUserComments(user.id)
+    .then((data) => {
+      console.log(data);
+      MainView.commentsUpdate(data, "Meus Comentários");
     })
-}
+    .catch((error) => {
+      alert(error.message);
+    });
+};
 
 const handleShowHideUser = () => {
-    const userDataTag = document.getElementById('user-data');
-    const newCommentTag = document.getElementById('form-comentario');
-    if (userDataTag.classList.contains('disabled') && LoginService.isLoggedIn()) {
-        userDataTag.classList.remove('disabled');
-        newCommentTag.classList.add('disabled');
-        loadUserData();
-    } else {
-        userDataTag.classList.add('disabled');
-        if (LoginService.isLoggedIn()) {
-            newCommentTag.classList.remove('disabled');
-        }
-        loadComment()
+  const userDataTag = document.getElementById("user-data");
+  const newCommentTag = document.getElementById("form-comentario");
+  if (userDataTag.classList.contains("disabled") && LoginService.isLoggedIn()) {
+    userDataTag.classList.remove("disabled");
+    newCommentTag.classList.add("disabled");
+    loadUserData();
+  } else {
+    userDataTag.classList.add("disabled");
+    if (LoginService.isLoggedIn()) {
+      newCommentTag.classList.remove("disabled");
     }
-}
+    loadComment();
+  }
+};
+
+const LoadEditUserData = (e) => {
+  const firstname = document.getElementById("user_firstname");
+  const lastname = document.getElementById("user_lastname");
+  const login = document.getElementById("user_login");
+  const password = document.getElementById("user_password");
+
+  if (e.target.innerHTML == "Editar") {
+    e.target.innerHTML = "Salvar";
+    firstname.readOnly = false;
+    lastname.readOnly = false;
+    login.readOnly = false;
+    password.readOnly = false;
+  } else {
+    updateUserData({
+      username: login.value,
+      password1: password.value,
+      firstname: firstname.value,
+      lastname: lastname.value,
+    });
+
+    e.target.innerHTML = "Editar";
+    firstname.readOnly = true;
+    lastname.readOnly = true;
+    login.readOnly = true;
+    password.readOnly = true;
+  }
+};
+
+const updateUserData = ({ username, password1, firstname, lastname }) => {
+  const { id, imgLink, password } = LoginService.getUserSession();
+  let passwordEnd = password;
+  for (let i = 0; i < password1.length; i++) {
+    if (password1[i] != ".") {
+      passwordEnd = password1;
+    }
+  }
+  alert(passwordEnd);
+  UserService.apiEditUserComments({
+    id,
+    username,
+    password: passwordEnd,
+    firstname,
+    lastname,
+    imgLink,
+  })
+    .then((result) => {
+      alert("Editado com sucesso");
+    })
+    .catch((err) => {
+      alert(err);
+    });
+};
 
 const UserComponent = {
-    run: () => {
-        const btnMeusDados = document.getElementById('btnMeusDados');
-        btnMeusDados.addEventListener('click', handleShowHideUser);
-        const btnSairMDados = document.getElementById('btnSairMDados');
-        btnSairMDados.addEventListener('click', handleShowHideUser);
-    }
-}
+  run: () => {
+    const btnMeusDados = document.getElementById("btnMeusDados");
+    btnMeusDados.addEventListener("click", handleShowHideUser);
+    const btnSairMDados = document.getElementById("btnSairMDados");
+    btnSairMDados.addEventListener("click", handleShowHideUser);
+    const btnEditUser = document.getElementById("btnEditUserData");
+    btnEditUser.addEventListener("click", LoadEditUserData);
+  },
+};
 
-export { UserComponent }
+export { UserComponent };
