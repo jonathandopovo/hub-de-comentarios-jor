@@ -45,6 +45,11 @@ const displayUserData = (user) => {
             <input class="form-control" type="text" name="user_lastname" id="user_lastname"
                 value="${user.getLastname()}" readonly>
         </div>
+        <div class="col-4">
+            <label class="form-label" for="user_image">Imagem</label>
+            <input class="form-control" type="text" name="user_image" id="user_image"
+                value="${user.getImgLink()}" readonly>
+        </div>
     </div>
     <div class="row d-inline-flex text-body-secondary  rounded">
         <div class="col-4">
@@ -69,7 +74,6 @@ const handleMeusComentarios = () => {
   const user = LoginService.getUserSession();
   UserService.apiGetUserComments(user.id)
     .then((data) => {
-      console.log(data);
       MainView.commentsUpdate(data, "Meus Comentários");
     })
     .catch((error) => {
@@ -93,11 +97,17 @@ const handleShowHideUser = () => {
   }
 };
 
+// const listenerToBtnMeusDados = () => {
+//     const btnMeusDados = document.getElementById('btnMeusDados');
+//         btnMeusDados.addEventListener('click', handleShowHideUser);
+// }
+
 const LoadEditUserData = (e) => {
   const firstname = document.getElementById("user_firstname");
   const lastname = document.getElementById("user_lastname");
   const login = document.getElementById("user_login");
   const password = document.getElementById("user_password");
+  const imgLink = document.getElementById("user_image");
 
   if (e.target.innerHTML == "Editar") {
     e.target.innerHTML = "Salvar";
@@ -105,12 +115,14 @@ const LoadEditUserData = (e) => {
     lastname.readOnly = false;
     login.readOnly = false;
     password.readOnly = false;
+    imgLink.readOnly = false;
   } else {
     updateUserData({
       username: login.value,
       password1: password.value,
       firstname: firstname.value,
       lastname: lastname.value,
+      imgLink: imgLink.value,
     });
 
     e.target.innerHTML = "Editar";
@@ -118,18 +130,25 @@ const LoadEditUserData = (e) => {
     lastname.readOnly = true;
     login.readOnly = true;
     password.readOnly = true;
+    imgLink.readOnly = true;
   }
 };
 
-const updateUserData = ({ username, password1, firstname, lastname }) => {
-  const { id, imgLink, password } = LoginService.getUserSession();
+const updateUserData = ({
+  username,
+  password1,
+  firstname,
+  lastname,
+  imgLink,
+}) => {
+  const { id, password } = LoginService.getUserSession();
   let passwordEnd = password;
   for (let i = 0; i < password1.length; i++) {
     if (password1[i] != ".") {
       passwordEnd = password1;
     }
   }
-  alert(passwordEnd);
+
   UserService.apiEditUserComments({
     id,
     username,
@@ -148,8 +167,6 @@ const updateUserData = ({ username, password1, firstname, lastname }) => {
 
 const UserComponent = {
   run: () => {
-    const btnMeusDados = document.getElementById("btnMeusDados");
-    btnMeusDados.addEventListener("click", handleShowHideUser);
     const btnSairMDados = document.getElementById("btnSairMDados");
     btnSairMDados.addEventListener("click", handleShowHideUser);
     const btnEditUser = document.getElementById("btnEditUserData");
@@ -157,4 +174,4 @@ const UserComponent = {
   },
 };
 
-export { UserComponent };
+export { UserComponent, handleShowHideUser };

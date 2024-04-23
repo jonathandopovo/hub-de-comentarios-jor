@@ -27,7 +27,7 @@ const UserService = {
     return new Promise((resolve, reject) => {
       db.query(
         "UPDATE user SET username = ?, password = ?, firstname = ?, lastname = ?, imgLink = ? WHERE id = ?",
-        [username, password, firstname, lastname, imgLink, id], 
+        [username, password, firstname, lastname, imgLink, id],
         (err, result) => {
           if (err) {
             reject("Error updating user");
