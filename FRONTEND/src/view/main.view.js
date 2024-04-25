@@ -1,5 +1,8 @@
 import { formatDate, randomColors } from "../utils.js";
-const header = `
+import LoginService from "../services/login.service.js";
+
+const header = () =>{
+    return `
 <!-- HEADER -->
 <header>
      <!-- USER PROFILE -->
@@ -8,9 +11,10 @@ const header = `
         </div>
      </div>
 </header>
-`;
+`}
 
-const main = `
+const main = () => {
+    return `
 <main class="container">
 <div class="row">
     <div class="col">
@@ -39,10 +43,7 @@ const main = `
             <div id="user-content">
 
             </div>
-            <div class="d-flex">
-                <button id="btnSairMDados" class="btn-submit btn btn-dark my-2">Voltar</button>
-                <button id="btnEditUserData" class="btn-submit btn btn-dark mx-4 my-2">Editar</button>
-            </div>
+            <button id="btnSairMDados" class="btn-submit btn btn-dark my-2">Voltar</button>
         </div>
     </div>
     <!--FEED: DISPLAY COMMENTS -->
@@ -50,72 +51,104 @@ const main = `
     </div>
 </div>
 </main>
-`;
+`}
+
+const modal = () =>
+{ 
+    let value = '...';
+    
+    if (LoginService.isLoggedIn()) {
+        value = LoginService.getUserSession().getImgLink();
+    }
+
+    return `
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Editar imagem de perfil</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <label class="form-label" for="inputImgLink">Image link</label>
+      <input class="form-control" type="text" name="inputImgLink" id="inputImgLink"
+          value='${value}'>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button id='btnSaveImg' type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+`}
+
+
+const appStructure = () => {return header() + main() + modal()};
 
 const MainView = {
-  build: () => {
-    const appStructure = header + main;
-    document.body.innerHTML = ``;
-    document.body.innerHTML = appStructure;
-  },
-  commentsUpdate: (comments, title, handler) => {
-    const divFeed = document.getElementById("feed");
-    divFeed.innerHTML = ``;
+    build: () => {
+        document.body.innerHTML = ``;
+        document.body.innerHTML = appStructure();
+    },
+    update:()=>{
+        // document.body.innerHTML = ``;
+        // document.body.innerHTML = appStructure(modalInputValue);
+    },
+    commentsUpdate: (comments, title, handler) => {
+        const divFeed = document.getElementById('feed');
+        divFeed.innerHTML = ``
 
-    const feedTitle = document.createElement("div");
-    feedTitle.innerHTML = `<h5 class="border-bottom pb-2 mb-0">${
-      title ? title : "Feed"
-    }</h5>`;
-    divFeed.appendChild(feedTitle);
+        const feedTitle = document.createElement('div');
+        feedTitle.innerHTML = `<h5 class="border-bottom pb-2 mb-0">${title ? title : 'Feed'}</h5>`
+        divFeed.appendChild(feedTitle);
 
-    const commentsGroup = document.createElement("div");
-    commentsGroup.setAttribute("id", "comment-feed");
+        const commentsGroup = document.createElement('div');
+        commentsGroup.setAttribute("id", "comment-feed");
 
-    comments.forEach((item) => {
-      const commentDiv = document.createElement("div");
-      commentDiv.setAttribute("id", `${item.getAuthor()}-${item.getId()}`);
-      commentDiv.className = "d-flex text-body-secondary pt-3 border-bottom";
-      commentDiv.innerHTML = `
+        comments.forEach(item => {
+            const commentDiv = document.createElement('div');
+            commentDiv.setAttribute("id", `${item.getAuthor()}-${item.getId()}`);
+            commentDiv.className = 'd-flex text-body-secondary pt-3 border-bottom'
+            commentDiv.innerHTML = `
             <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32"
                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32"
                 preserveAspectRatio="xMidYMid slice" focusable="false">
                 <title>comentário</title>
-                <rect width="100%" height="100%" fill="#${
-                  randomColors().dark
-                }"></rect>
-                <text x="35%" y="50%" fill="#${
-                  randomColors().light
-                }"dy=".3em">${item.getAuthor().charAt(0)}</text>
+                <rect width="100%" height="100%" fill="#${randomColors().dark}"></rect>
+                <text x="35%" y="50%" fill="#${randomColors().light}"dy=".3em">${item.getAuthor().charAt(0)}</text>
             </svg>
             <p class="pb-3 mb-0 small lh-sm text-gray-dark">
                 <strong class="d-block text-gray-dark">@${item.getAuthor()}
-                <span class="date-style badge text-bg-secondary">${formatDate(
-                  item.getCreatedAt()
-                )}</span>
+                <span class="date-style badge text-bg-secondary">${formatDate(item.getCreatedAt())}</span>
                 </strong>
                 <span class="comment">
                 ${item.getComment()}
                 </span>
             </p>        
-        `;
-      commentsGroup.appendChild(commentDiv);
-    });
+        `
+            commentsGroup.appendChild(commentDiv);
+        })
 
-    if (handler) {
-      commentsGroup.addEventListener("click", handler);
-      commentsGroup.addEventListener("contextmenu", handler);
-    }
+        if (handler) {
+            commentsGroup.addEventListener('click', handler);
+            commentsGroup.addEventListener('contextmenu', handler);
+        }
 
-    divFeed.appendChild(commentsGroup);
 
-    const smallTag = document.createElement("small");
-    smallTag.className = "d-block text-end mt-3";
-    smallTag.innerHTML = `
+        divFeed.appendChild(commentsGroup);
+
+        const smallTag = document.createElement('small');
+        smallTag.className = 'd-block text-end mt-3';
+        smallTag.innerHTML = `
             <a href="#">All updates</a>
         `;
 
-    divFeed.appendChild(smallTag);
-  },
-};
+        divFeed.appendChild(smallTag);
+
+
+    }
+}
 
 export default MainView;
