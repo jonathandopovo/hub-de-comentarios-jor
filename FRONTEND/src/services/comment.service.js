@@ -35,7 +35,7 @@ const CommentService = {
   },
   apiPostComment: (comment) => {
     return new Promise((resolve, reject) => {
-      fetch(`${URL_API}/comment`, {
+      fetch(`${URL_API}/comment/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

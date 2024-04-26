@@ -2,27 +2,26 @@ import UserService from "../services/user.service.js";
 import LoginService from "../services/login.service.js";
 import { randomColors } from "../utils.js";
 import { loadComment } from "./comment.component.js";
-import MainView from '../view/main.view.js';
-import { userIcon } from './login.component.js';
+import MainView from "../view/main.view.js";
+import { userIcon } from "./login.component.js";
 
 let _inEdition = false;
 let _modalExample;
 let _modal;
 
 const loadUserData = () => {
-    const user = LoginService.getUserSession();
-    displayUserData(user);
-}
+  const user = LoginService.getUserSession();
+  displayUserData(user);
+};
 const iconeUsuario = (avatarColor, imgLink) => {
-
-    if (imgLink)
-        return `
+  if (imgLink)
+    return `
                 <div id='userIcon' type='button' data-bs-toggle="modal" data-bs-target="#exampleModal">
                 ${userIcon(imgLink, 200, 200)} 
                 </div>        
-                `
-    else
-        return `
+                `;
+  else
+    return `
         <div id='userIcon' type='button' data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 24 24"
                 fill="none">
@@ -35,21 +34,23 @@ const iconeUsuario = (avatarColor, imgLink) => {
                     fill="#${avatarColor}" />
                 </svg>
                 </div>
-            `
-}
+            `;
+};
 const changeProfileIcon = () => {
-    const inputImgLink = document.getElementById('inputImgLink');
-    inputImgLink.value = LoginService.getUserSession().getImgLink();
-}
+  const inputImgLink = document.getElementById("inputImgLink");
+  inputImgLink.value = LoginService.getUserSession().getImgLink();
+};
 const displayUserData = (user) => {
-    const userContent = document.getElementById('user-content');
-    userContent.innerHTML = ``
-    const newDiv = document.createElement('div');
-    newDiv.innerHTML = `
+  const userContent = document.getElementById("user-content");
+  userContent.innerHTML = ``;
+  const newDiv = document.createElement("div");
+  newDiv.innerHTML = `
 
     <div class="groupBtnsUserData">
     <button id='btnMeusComentarios' class='btn-submit btn btn-dark my-2'>Meus Comentários</button>
-    <button id='btnEditUsuario' class="btn-submit btn btn-dark my-2  ${_inEdition ? 'editUsuario' : ''}">${_inEdition ? 'Salvar Edições' : 'Editar Dados'}</button>
+    <button id='btnEditUsuario' class="btn-submit btn btn-dark my-2  ${
+      _inEdition ? "editUsuario" : ""
+    }">${_inEdition ? "Salvar Edições" : "Editar Dados"}</button>
     </div>
 
     ${iconeUsuario(randomColors().dark, user.getImgLink())}
@@ -59,101 +60,119 @@ const displayUserData = (user) => {
         <div class="col-4">
             <label class="form-label" for="user_name">Nome</label>
             <input class="form-control" type="text" name="user_name" id="user_firstname" value="${user.getFirstname()}"
-            ${_inEdition ? '' : 'readonly'}>
+            ${_inEdition ? "" : "readonly"}>
         </div>
         <div class="col-4">
             <label class="form-label" for="user_lastname">Sobrenome</label>
             <input class="form-control" type="text" name="user_lastname" id="user_lastname"
-                value="${user.getLastname()}" ${_inEdition ? '' : 'readonly'}>
+                value="${user.getLastname()}" ${_inEdition ? "" : "readonly"}>
         </div>
     </div>
     <div class="row d-inline-flex text-body-secondary rounded">
         <div class="col-4">
             <label class="form-label" for="user_login">Login</label>
             <input class="form-control" type="text" name="user_login" id="user_login" value="${user.getUsername()}"
-            ${_inEdition ? '' : 'readonly'}>
+            ${_inEdition ? "" : "readonly"}>
             </div>
         <div class="col-4">
             <label class="form-label" for="user_password">Senha</label>
             <input class="form-control" type="password" name="user_password" id="user_password"
-                value="........" ${_inEdition ? '' : 'readonly'}>
+                value="........" ${_inEdition ? "" : "readonly"}>
         </div>
     </div>
     
-    `
+    `;
 
-    userContent.appendChild(newDiv)
+  userContent.appendChild(newDiv);
 
-    const btnMeusComentarios = document.getElementById('btnMeusComentarios');
-    btnMeusComentarios.addEventListener('click', handleMeusComentarios);
+  const btnMeusComentarios = document.getElementById("btnMeusComentarios");
+  btnMeusComentarios.addEventListener("click", handleMeusComentarios);
 
-    const btnEditUsuario = document.getElementById('btnEditUsuario');
-    btnEditUsuario.addEventListener('click', handleEditUsuarios);
+  const btnEditUsuario = document.getElementById("btnEditUsuario");
+  btnEditUsuario.addEventListener("click", handleEditUsuarios);
 
-    const userIcon = document.getElementById('userIcon');
-    userIcon.addEventListener('click', changeProfileIcon);
+  const userIcon = document.getElementById("userIcon");
+  userIcon.addEventListener("click", changeProfileIcon);
+};
 
-}
+const uncriptedPassword = (password) => {
+  for (let i = 0; i < password.length; i++) {
+    if (password[i] != ".") {
+      return true;
+    }
+  }
+
+  return false;
+};
 
 const handleEditUsuarios = () => {
-    if (_inEdition) {
-        const user = {
-            id: LoginService.getUserSession().getId(),
-            firstname: document.getElementById('user_firstname').value,
-            lastname: document.getElementById('user_lastname').value,
-            username: document.getElementById('user_login').value,
-            password: document.getElementById('user_password').value,
-            imgLink: document.getElementById('inputImgLink').value
-        }
-        UserService.apitUpdateUser(user).then(resposta => {
-            alert(resposta)
-            loadUserData();
-        }).catch(err => {
-            console.log(err)
-        });
-    } else {
-        _inEdition = true;
-        loadUserData();
-    }
-}
-const handleMeusComentarios = () => {
-    const user = LoginService.getUserSession();
-    UserService.apiGetUserComments(user.id).then(data => {
-        MainView.commentsUpdate(data, 'Meus Comentários')
-    }).catch(error => {
-        alert(error.message)
-    })
-}
-const handleShowHideUser = () => {
-    const userDataTag = document.getElementById('user-data');
-    const newCommentTag = document.getElementById('form-comentario');
-    if (userDataTag.classList.contains('disabled') && LoginService.isLoggedIn()) {
-        userDataTag.classList.remove('disabled');
-        newCommentTag.classList.add('disabled');
-        loadUserData();
-    } else {
-        userDataTag.classList.add('disabled');
-        _inEdition = false;
-        if (LoginService.isLoggedIn()) {
-            newCommentTag.classList.remove('disabled');
-        }
-        loadComment()
-    }
-}
-const handleImgLink = () => {
+  if (_inEdition) {
+    const loggedUserPassword = LoginService.getUserSession().password;
     const user = {
-        id: LoginService.getUserSession().getId(),
-        imgLink: document.getElementById('inputImgLink').value,
-
-    }
-    UserService.apiUpdataImgLink(user).then(resposta => {
-         alert(resposta);
-        _modal.hide();
-
-    }).catch(err => {
-        console.log(err)
+      id: LoginService.getUserSession().getId(),
+      firstname: document.getElementById("user_firstname").value,
+      lastname: document.getElementById("user_lastname").value,
+      username: document.getElementById("user_login").value,
+      password: uncriptedPassword(
+        document.getElementById("user_password").value
+      )
+        ? uncriptedPassword(document.getElementById("user_password").value)
+        : loggedUserPassword,
+      imgLink: document.getElementById("inputImgLink").value,
+    };
+    UserService.apitUpdateUser(user)
+      .then((resposta) => {
+        alert(resposta);
+        loadUserData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    _inEdition = true;
+    loadUserData();
+  }
+};
+const handleMeusComentarios = () => {
+  const user = LoginService.getUserSession();
+  UserService.apiGetUserComments(user.id)
+    .then((data) => {
+      MainView.commentsUpdate(data, "Meus Comentários");
+    })
+    .catch((error) => {
+      alert(error.message);
     });
-}
+};
+const handleShowHideUser = () => {
+  const userDataTag = document.getElementById("user-data");
+  const newCommentTag = document.getElementById("form-comentario");
+  if (userDataTag.classList.contains("disabled") && LoginService.isLoggedIn()) {
+    userDataTag.classList.remove("disabled");
+    newCommentTag.classList.add("disabled");
+    loadUserData();
+  } else {
+    userDataTag.classList.add("disabled");
+    _inEdition = false;
+    if (LoginService.isLoggedIn()) {
+      newCommentTag.classList.remove("disabled");
+    }
+    loadComment();
+  }
+};
+const handleImgLink = () => {
+  const user = {
+    id: LoginService.getUserSession().getId(),
+    imgLink: document.getElementById("inputImgLink").value,
+  };
+  UserService.apiUpdataImgLink(user)
+    .then((resposta) => {
+      alert(resposta);
+      _modal.hide();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 // const listenerToBtnMeusDados = () => {
 //     const btnMeusDados = document.getElementById('btnMeusDados');
@@ -161,17 +180,16 @@ const handleImgLink = () => {
 // }
 
 const UserComponent = {
-    run: () => {
+  run: () => {
+    const btnSairMDados = document.getElementById("btnSairMDados");
+    btnSairMDados.addEventListener("click", handleShowHideUser);
 
-        const btnSairMDados = document.getElementById('btnSairMDados');
-        btnSairMDados.addEventListener('click', handleShowHideUser);
+    const btnSaveImg = document.getElementById("btnSaveImg");
+    btnSaveImg.addEventListener("click", handleImgLink);
 
-        const btnSaveImg = document.getElementById('btnSaveImg');
-        btnSaveImg.addEventListener('click', handleImgLink);
+    _modalExample = document.querySelector("#exampleModal");
+    _modal = new bootstrap.Modal(_modalExample);
+  },
+};
 
-        _modalExample = document.querySelector('#exampleModal')
-        _modal = new bootstrap.Modal(_modalExample) 
-    }
-}
-
-export { UserComponent, handleShowHideUser }
+export { UserComponent, handleShowHideUser };

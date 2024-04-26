@@ -53,6 +53,7 @@ const submitComment = (event) => {
     event.preventDefault();
 
     let comment = new Comment()
+    
     comment.setUserId(LoginService.getUserSession().getId());
     comment.setComment(getInputCommentValue());
 
