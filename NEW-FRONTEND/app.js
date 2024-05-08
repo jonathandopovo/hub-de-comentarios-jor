@@ -1,3 +1,3 @@
-import Controller from "./controller/MainController.js";
+import Controller from './controller/main.controller.js';
 
 Controller.run();
